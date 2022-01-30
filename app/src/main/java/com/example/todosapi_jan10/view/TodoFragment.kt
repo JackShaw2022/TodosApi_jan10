@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todosapi_jan10.adapter.TodoAdapter
 import com.example.todosapi_jan10.databinding.FragmentTodoBinding
 import com.example.todosapi_jan10.model.network.ApiManager
 import com.example.todosapi_jan10.model.repository.TodoRepository
@@ -31,12 +34,14 @@ class TodoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.todos.observe(viewLifecycleOwner) {
-            binding.todoTv.text = it.toString()
+        viewModel.todos.observe(viewLifecycleOwner) { todos ->
+            binding.todoRv.apply {
+                adapter = TodoAdapter(todos!!)
+                layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            }
         }
     }
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
